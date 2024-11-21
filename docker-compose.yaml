@@ -1,0 +1,77 @@
+services:
+  clever-cms_be:
+    container_name: clever-cms_be
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    ports:
+      - '4000:4000'
+    depends_on:
+      db:
+        condition: service_healthy
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl -f http://localhost:4000/health"] //TODO: add endpoint
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 5
+    # restart: unless-stopped
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+        window: 60s
+    volumes:
+      - ./src:/app/src
+      # - .:/usr/src/app
+      # - /usr/src/app/node_modules
+    networks:
+      - clever-cms_network
+
+  db:
+    container_name: clever-cms_db
+    image: postgres:17.1
+    ports:
+      - '5432:5432'
+    env_file:
+      - .env
+    volumes:
+      - clever-cms_db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U tarasPG']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - clever-cms_network
+
+  pgadmin:
+    image: dpage/pgadmin4:7.2
+    container_name: pgadmin
+    env_file:
+      - .env
+    ports:
+      - '5050:80'
+    volumes:
+      - clever-cms_pgadmin:/var/lib/pgadmin/data
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -f http://localhost/pgadmin4']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - clever-cms_network
+
+volumes:
+  clever-cms_db-data:
+  clever-cms_pgadmin:
+
+networks:
+  clever-cms_network:
+    driver: bridge

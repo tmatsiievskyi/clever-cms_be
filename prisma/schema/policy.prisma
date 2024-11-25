@@ -1,0 +1,16 @@
+
+model Policy {
+    id Int @id @default(autoincrement())
+    name String @unique
+
+    effect String
+    actions String[]
+    resources String[]
+    conditions Json?
+
+    users User[]
+    roles Role[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
+}

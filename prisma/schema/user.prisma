@@ -1,0 +1,22 @@
+model User {
+  id Int @id @default(autoincrement())
+
+  email     String @unique @db.VarChar(255)
+  password  String @db.VarChar(255)
+  firstName String @db.VarChar(50)
+  lastName  String @db.VarChar(50)
+
+  isActive   Boolean @default(true)
+  isVerified Boolean @default(false)
+
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId Int?
+
+  units    Unit[]
+  roles    Role[]
+  policies Policy[]
+  refreshToken RefreshToken[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}

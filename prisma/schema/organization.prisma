@@ -1,0 +1,20 @@
+model Organization {
+  id Int @id @default(autoincrement())
+
+  name            String    @unique @db.VarChar(255)
+  nameLocKey      String?   @db.VarChar(55)
+  titleName       String? 
+  titleNameLocKey String?   @db.VarChar(55)
+  address         String    @db.VarChar(255)
+  addressLocKey   String?   @db.VarChar(55)
+  phone           String    @db.VarChar(255)
+  email           String    @unique @db.VarChar(255)
+
+  units    Unit[]
+  users    User[]
+  roles    Role[]
+  policies Policy[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}

@@ -1,6 +1,6 @@
 services:
-  clever-cms_be:
-    container_name: clever-cms_be
+  clever-crm_be:
+    container_name: clever-crm_be
     build:
       context: .
       dockerfile: Dockerfile
@@ -25,17 +25,17 @@ services:
     volumes:
       - ./src:/app/src
     networks:
-      - clever-cms_network
+      - cleverNetwork
 
   db:
-    container_name: clever-cms_db
+    container_name: clever-crm_db
     image: postgres:17.1
     ports:
       - '5432:5432'
     env_file:
       - .env
     volumes:
-      - clever-cms_db-data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U tarasPG']
       interval: 30s
@@ -43,17 +43,17 @@ services:
       retries: 5
     restart: unless-stopped
     networks:
-      - clever-cms_network
+      - cleverNetwork
 
   pgadmin:
-    image: dpage/pgadmin4:7.2
+    image: dpage/pgadmin4:8
     container_name: pgadmin
     env_file:
       - .env
     ports:
       - '5050:80'
     volumes:
-      - clever-cms_pgadmin:/var/lib/pgadmin/data
+      - pgadmin-data:/var/lib/pgadmin
     depends_on:
       db:
         condition: service_healthy
@@ -64,12 +64,13 @@ services:
       retries: 5
     restart: unless-stopped
     networks:
-      - clever-cms_network
+      - cleverNetwork
 
 volumes:
-  clever-cms_db-data:
-  clever-cms_pgadmin:
+  db-data:
+  pgadmin-data:
 
 networks:
-  clever-cms_network:
+  cleverNetwork:
+    name: cleverNetwork
     driver: bridge

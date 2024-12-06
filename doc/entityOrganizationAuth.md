@@ -23,7 +23,7 @@
 - `role` many-to-many
 - `...`
 
-3. `User`. Represents individuals who can access CMS. Medical `organization` - Doctor, Nurses, etc. Primary actors in the system
+3. `User`. Represents individuals who can access CRM. Medical `organization` - Doctor, Nurses, etc. Primary actors in the system
 
 **Fields**
 

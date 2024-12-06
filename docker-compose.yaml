@@ -1,6 +1,6 @@
 services:
-  clever-cms_be:
-    container_name: clever-cms_be
+  clever-crm_be:
+    container_name: clever-crm_be
     build:
       context: .
       dockerfile: Dockerfile
@@ -25,13 +25,13 @@ services:
     volumes:
       - ./src:/app/src
     networks:
-      - clever-cms_network
+      - cleverNetwork
 
   db:
-    container_name: clever-cms_db
+    container_name: clever-crm_db
     image: postgres:17.1
     ports:
-      - '5555:5432'
+      - '5432:5432'
     env_file:
       - .env
     volumes:
@@ -43,7 +43,7 @@ services:
       retries: 5
     restart: unless-stopped
     networks:
-      - clever-cms_network
+      - cleverNetwork
 
   pgadmin:
     image: dpage/pgadmin4:8
@@ -64,12 +64,13 @@ services:
       retries: 5
     restart: unless-stopped
     networks:
-      - clever-cms_network
+      - cleverNetwork
 
 volumes:
   db-data:
   pgadmin-data:
 
 networks:
-  clever-cms_network:
+  cleverNetwork:
+    name: cleverNetwork
     driver: bridge

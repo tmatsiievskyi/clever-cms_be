@@ -1,16 +1,20 @@
-
 model Policy {
-    id Int @id @default(autoincrement())
-    name String @unique
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(255)
+  nameLocKey String? @db.VarChar(55)
 
-    effect String
-    actions String[]
-    resources String[]
-    conditions Json?
+  effect     String
+  actions    String[]
+  resources  String[]
+  conditions Json?
 
-    users User[]
-    roles Role[]
+  users User[]
+  roles Role[]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now())
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @default(now())
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int
+
+  @@unique([name, organizationId], name: "idx_policy_name_organizationId")
 }

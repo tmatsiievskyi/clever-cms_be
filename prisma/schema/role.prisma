@@ -1,14 +1,21 @@
-
 model Role {
-    id Int @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
-    name String
-    description String
-    
-    policies Policy[]
-    users User[]
-    units Unit[]
+  name              String     @db.VarChar(255)
+  nameLocKey        String?    @db.VarChar(55)
+  description       String     @db.VarChar(255)
+  descriptionLocKey String?    @db.VarChar(55)
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now())
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int
+
+  policies Policy[]
+  users    User[]
+  units    Unit[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@unique([name, organizationId], name: "idx_role_name_organizationId")
 }

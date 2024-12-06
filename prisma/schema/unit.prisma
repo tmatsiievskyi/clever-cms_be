@@ -1,21 +1,20 @@
-
-
 model Unit {
-    id Int @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
-    name String @db.VarChar(255)
+  name String @db.VarChar(255)
+  nameLocKey String? @db.VarChar(55)
 
-    parentUnit Unit? @relation("UnitHierarchy", fields: [parentUnitId], references: [id])
-    parentUnitId Int?
+  parentUnit   Unit? @relation("UnitHierarchy", fields: [parentUnitId], references: [id])
+  parentUnitId Int?
 
-    childUnits Unit[] @relation("UnitHierarchy")
+  childUnits Unit[] @relation("UnitHierarchy")
 
-    organization Organization @relation(fields: [organizationId], references: [id])
-    organizationId Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int
 
-    users User[]
-    roles Role[]
+  users User[]
+  roles Role[]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
